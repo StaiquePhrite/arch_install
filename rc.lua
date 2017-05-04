@@ -65,7 +65,7 @@ local altkey       = "Mod1"
 local terminal     = "terminator" or "xterm"
 local editor       = os.getenv("EDITOR") or "nano" or "vi"
 local gui_editor   = "gvim"
-local browser      = "firefox"
+local browser      = "chromium"
 
 awful.util.terminal = terminal
 awful.util.tagnames = { "1", "2", "3", "4", "5" }
@@ -345,7 +345,8 @@ globalkeys = awful.util.table.join(
               {description = "restore minimized", group = "client"}),
 
     -- Dropdown application
-    awful.key({ modkey, }, "z", function () awful.screen.focused().quake:toggle() end),
+    -- awful.key({ modkey, }, "z", function () awful.screen.focused().quake:toggle() end),
+    awful.key({ modkey, }, "z", function () awful.spawn("slock") end),
 
     -- Widgets popups
     awful.key({ altkey, }, "c", function () lain.widget.calendar.show(7) end),
@@ -368,16 +369,16 @@ globalkeys = awful.util.table.join(
             os.execute(string.format("amixer -q set %s toggle", beautiful.volume.togglechannel or beautiful.volume.channel))
             beautiful.volume.update()
         end),
-    awful.key({ altkey, "Control" }, "m",
-        function ()
-            os.execute(string.format("amixer -q set %s 100%%", beautiful.volume.channel))
-            beautiful.volume.update()
-        end),
-    awful.key({ altkey, "Control" }, "0",
-        function ()
-            os.execute(string.format("amixer -q set %s 0%%", beautiful.volume.channel))
-            beautiful.volume.update()
-        end),
+    --awful.key({ altkey, "Control" }, "m",
+    --    function ()
+    --        os.execute(string.format("amixer -q set %s 100%%", beautiful.volume.channel))
+    --        beautiful.volume.update()
+    --    end),
+    -- awful.key({ altkey, "Control" }, "0",
+    --    function ()
+    --        os.execute(string.format("amixer -q set %s 0%%", beautiful.volume.channel))
+    --        beautiful.volume.update()
+    --    end),
 
 
     -- Copy primary to clipboard (terminals to gtk)
