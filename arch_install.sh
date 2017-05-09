@@ -154,7 +154,7 @@ exec awesome' > ~/.xinitrc
     yaourt -Syua mupdf slock \
       terminator tig udiskie xautolock zsh-completions scrot \
       zsh-syntax-highlighting chromium gimp meld mercurial \
-      screen tree unrar weechat wget htop hexchat \
+      screen tree unrar weechat wget htop hexchat ttf-hack \
       imagemagick openssh python-dbus python-keyring python-keyrings-alt \
       python-pip python2-dbus python2-pip rsync w3m aspell ruby tcl cmake
     sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
