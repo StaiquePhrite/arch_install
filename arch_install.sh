@@ -52,14 +52,14 @@ case $1 in
     ln -s /usr/share/zoneinfo/Europe/Paris /etc/localtime
     ;;
   ramdisk)
-    echo ' add ... keymap encrypt lvm2 ... to HOOKS before filesystems'
+    echo ' add ... keymap ... to HOOKS before filesystems'
     read -s
     vim /etc/mkinitcpio.conf
     mkinitcpio -p linux
     ;;
   bootloader)
     echo ' entries for Arch should use the following APPEND:'
-    echo 'APPEND root=/dev/mapper/lvmpool-groundzero cryptdevice=/dev/sdb1:crypt ro'
+    echo 'APPEND root=/dev/sda2 rw'
     read -s
     vim /boot/syslinux/syslinux.cfg
     syslinux-install_update -iam
