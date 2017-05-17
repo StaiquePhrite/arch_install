@@ -11,19 +11,31 @@ case $1 in
     # partition mgmt (use fdisk to create partition is not done already)
     echo ' ex:
     /dev/sda1 -> /boot ~500Mo
-    /dev/sda2 -> / ~35Go
-    /dev/sda3 -> /home ~the rest'
+    /dev/sda2 -> Encrypted LVM'
     read -s
     cfdisk /dev/sda
+    cfdisk /dev/sdb
+    ;;
+  encrypt)
+    modprobe dm_crypt
+    cryptsetup -c aes-xts-plain64 -s 512 -h sha512 -i 5000 -y luksFormat /dev/sdb1
+    cryptsetup luksDump /dev/sdb1
+    cryptsetup luksOpen /dev/sdb1 crypt
+    ;;
+  LVM)
+    pvcreate /dev/mapper/crypt
+    vgcreate lvmpool /dev/mapper/crypt
+    lvcreate -L 25GB -n groundzero lvmpool
+    lvcreate -l 100%FREE -n home lvmpool
     ;;
   format)
     mkfs.ext4 -O ^64bit /dev/sda1
-    mkfs.ext4 -O ^64bit /dev/sda2
-    mkfs.ext4 -O ^64bit /dev/sda3
-    mount /dev/sda2 /mnt
+    mkfs.ext4 -O ^64bit /dev/mapper/lvmpool-groundzero
+    mkfs.ext4 -O ^64bit /dev/mapper/lvmpool-home
+    mount /dev/mapper/lvmpool-groundzero /mnt
     mkdir /mnt/{boot,home}
     mount /dev/sda1 /mnt/boot
-    mount /dev/sda3 /mnt/home
+    mount /dev/mapper/lvmpool-home /mnt/home
     ;;
   strap)
     # system install
