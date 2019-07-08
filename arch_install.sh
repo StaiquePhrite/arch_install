@@ -11,7 +11,7 @@ case $1 in
     # partition mgmt (use fdisk to create partition is not done already)
     echo ' ex:
     /dev/sda1 -> /boot ~500Mo
-    /dev/sda2 -> / ~35Go
+    /dev/sda2 -> / ~65Go
     /dev/sda3 -> /home ~the rest'
     read -s
     cfdisk /dev/sda
@@ -77,7 +77,7 @@ case $1 in
     visudo
     ;;
   video)
-    pacman -Syu xorg-server xorg-xinit xorg-server-utils xf86-video-nouveau mesa
+    pacman -Syu xorg-server xorg-xinit xorg-server-utils nvidia-340xx nvidia-340xx-settings
     ;;
   xorg)
     # xorgconfig for keyboard
@@ -102,21 +102,15 @@ EndSection' > /etc/X11/xorg.conf.d/10-keyboard-terminate.conf
       ttf-cheapskate ttf-liberation \
       ttf-freefont ttf-arphic-uming ttf-baekmuk
     ;;
-  yaourt)
-    git clone https://aur.archlinux.org/package-query.git
-    cd package-query
+  yay)
+    git clone https://aur.archlinux.org/yay.git
+    cd yay
     makepkg -si
     cd ..
-    rm -rf package-query
-
-    git clone https://aur.archlinux.org/yaourt.git
-    cd yaourt
-    makepkg -si
-    cd ..
-    rm -rf yaourt
+    rm -rf yay
     ;;
   wm)
-    yaourt -Syu awesome compton
+    yay -Syu awesome
     echo '[[ -t 0 && $(tty) =~ /dev/tty ]] && ! pgrep -u $USER startx &> /dev/null && startx' > ~/.zprofile
     cat ~/.zprofile
     echo '#!/bin/sh
@@ -133,20 +127,18 @@ fi
 export DE=gnome
 
 setxkbmap fr
-compton -b
 
 exec awesome' > ~/.xinitrc
     cat ~/.xinitrc
     ;;
   misc)
-    yaourt -Syua mupdf slock \
-      terminator tig udiskie xautolock zsh-completions scrot \
-      zsh-syntax-highlighting chromium gimp meld mercurial \
+    yay -Syua mupdf slock \
+      xterm udiskie xautolock zsh-completions scrot \
+      zsh-syntax-highlighting chromium meld mercurial \
       screen tree unrar weechat wget htop screenfetch ttf-hack \
       imagemagick openssh python-dbus python-keyring python-keyrings-alt \
-      python-pip python2-dbus python2-pip rsync w3m aspell ruby tcl cmake
+      python-pip python2-dbus python2-pip rsync ruby tcl cmake
     sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-    sudo pip2 install notify2
     ;;
   ssh)
     echo ' run:
@@ -178,7 +170,7 @@ exec awesome' > ~/.xinitrc
     reboot
 
     - logged user:
-      - yaourt
+      - yay
       - wm
       - misc
       - ssh
